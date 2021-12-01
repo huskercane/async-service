@@ -12,12 +12,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The URL is a bit different, more web-friendly and not REST.  It would be: http://localhost:8083/api/servlet/async/tenant?name={tenantName} for example: http://localhost:8083/api/servlet/sync/tenant?name=Customer1
  */
 @WebServlet(name = "TenantASyncServlet", urlPatterns = "/api/servlet/async/tenant", asyncSupported = true)
 public class TenantASyncServlet extends HttpServlet {
+  private static final Logger logger = LoggerFactory.getLogger(TenantASyncServlet.class);
 
   @Inject
   private HttpService httpService;
@@ -32,18 +35,18 @@ public class TenantASyncServlet extends HttpServlet {
     PrintWriter out = servletResponse.getWriter();
 
     String tenantName = servletRequest.getParameter("name");
-    httpService.callJersey(tenantName, SERVICE_URL_15)
+    httpService.fetchData(tenantName, SERVICE_URL_15)
         .subscribeOn(Schedulers.io())
         .subscribe(
             s -> {
               out.write("{\"response\":\"" + s.getResponse() + "\",\"tenant\":\"" + s.getThreadLocalTenantName() + "\"}");
             },
             t -> {
-              System.out.println(t.getMessage());
+              logger.error(t.getMessage());
               out.write("{\"response\":\"" + t.getMessage() + "\",\"tenant\":\"ERROR\"}");
             },
             () -> {
-              System.out.println("Closing the response.");
+              logger.debug("Closing the response.");
               asyncContext.complete();
             }
 

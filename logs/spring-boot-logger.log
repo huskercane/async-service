@@ -1,0 +1,42 @@
+2021-12-01 10:58:49,468 INFO org.springframework.boot.StartupInfoLogger [main] Starting AsyncServiceApplication using Java 11.0.12 on coopershawk with PID 484131 (/home/rohits/work/code/async-service/build/classes/java/main started by rohits in /home/rohits/work/code/async-service)
+2021-12-01 10:58:49,470 INFO org.springframework.boot.SpringApplication [main] No active profile set, falling back to default profiles: default
+2021-12-01 10:58:50,705 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat initialized with port(s): 8083 (http)
+2021-12-01 10:58:50,719 INFO org.apache.juli.logging.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8083"]
+2021-12-01 10:58:50,720 INFO org.apache.juli.logging.DirectJDKLog [main] Starting service [Tomcat]
+2021-12-01 10:58:50,722 INFO org.apache.juli.logging.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/9.0.54]
+2021-12-01 10:58:50,794 INFO org.apache.juli.logging.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2021-12-01 10:58:50,795 INFO org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 1282 ms
+2021-12-01 10:58:51,392 INFO org.apache.juli.logging.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8083"]
+2021-12-01 10:58:51,415 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat started on port(s): 8083 (http) with context path ''
+2021-12-01 10:58:51,427 INFO org.springframework.boot.StartupInfoLogger [main] Started AsyncServiceApplication in 2.422 seconds (JVM running for 2.825)
+2021-12-01 11:00:06,146 INFO org.apache.juli.logging.DirectJDKLog [http-nio-8083-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-12-01 11:00:06,147 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-8083-exec-1] Initializing Servlet 'dispatcherServlet'
+2021-12-01 11:00:06,148 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-8083-exec-1] Completed initialization in 1 ms
+2021-12-01 11:00:06,167 INFO com.terrydu.asyncservice.api.mvc.controller.SyncTenantController [http-nio-8083-exec-1] Thread http-nio-8083-exec-1, Tenant ZzssDD: Handling request for '/api/mvc/sync/tenant/ZzssDD'
+2021-12-01 11:00:21,872 INFO com.terrydu.asyncservice.api.mvc.controller.SyncTenantController [http-nio-8083-exec-1] Thread http-nio-8083-exec-1, Tenant ZzssDD: Completing request for '/api/mvc/sync/tenant/ZzssDD' taking 15705 ms
+2021-12-01 11:00:22,229 INFO com.terrydu.asyncservice.api.jersey.controller.AsyncTenantController [http-nio-8083-exec-2] Calling Terry URL, tenant: ZzssDD on thread http-nio-8083-exec-2
+2021-12-01 11:00:22,239 INFO com.terrydu.asyncservice.api.HttpService [RxCachedThreadScheduler-1] Calling Terry URL, tenant: ZzssDD on thread RxCachedThreadScheduler-1
+2021-12-01 11:00:35,130 INFO com.terrydu.asyncservice.api.mvc.controller.AsyncTenantController [http-nio-8083-exec-3] Handling request for '/api/async/tenant/ZzssDD' on thread http-nio-8083-exec-3
+2021-12-01 11:00:35,137 INFO com.terrydu.asyncservice.api.HttpService [RxCachedThreadScheduler-2] Calling Terry URL, tenant: ZzssDD on thread RxCachedThreadScheduler-2
+2021-12-01 11:00:50,577 INFO com.terrydu.asyncservice.api.jersey.controller.AsyncTenantController [http-nio-8083-exec-6] Calling Terry URL, tenant: ZzssDD on thread http-nio-8083-exec-6
+2021-12-01 11:00:50,577 INFO com.terrydu.asyncservice.api.HttpService [RxCachedThreadScheduler-1] Calling Terry URL, tenant: ZzssDD on thread RxCachedThreadScheduler-1
+2021-12-01 11:01:05,682 INFO com.terrydu.asyncservice.api.HttpService [RxCachedThreadScheduler-2] Calling Terry URL, tenant: ZzssDD on thread RxCachedThreadScheduler-2
+2021-12-01 11:13:18,183 INFO org.springframework.boot.StartupInfoLogger [main] Starting AsyncServiceApplication using Java 11.0.12 on coopershawk with PID 495482 (/home/rohits/work/code/async-service/build/classes/java/main started by rohits in /home/rohits/work/code/async-service)
+2021-12-01 11:13:18,185 INFO org.springframework.boot.SpringApplication [main] No active profile set, falling back to default profiles: default
+2021-12-01 11:13:18,808 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat initialized with port(s): 8083 (http)
+2021-12-01 11:13:18,813 INFO org.apache.juli.logging.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8083"]
+2021-12-01 11:13:18,813 INFO org.apache.juli.logging.DirectJDKLog [main] Starting service [Tomcat]
+2021-12-01 11:13:18,814 INFO org.apache.juli.logging.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/9.0.54]
+2021-12-01 11:13:18,860 INFO org.apache.juli.logging.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2021-12-01 11:13:18,860 INFO org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 640 ms
+2021-12-01 11:13:19,103 INFO org.apache.juli.logging.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8083"]
+2021-12-01 11:13:19,110 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat started on port(s): 8083 (http) with context path ''
+2021-12-01 11:13:19,119 INFO org.springframework.boot.StartupInfoLogger [main] Started AsyncServiceApplication in 1.242 seconds (JVM running for 1.658)
+2021-12-01 11:13:29,939 INFO org.apache.juli.logging.DirectJDKLog [http-nio-8083-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-12-01 11:13:29,940 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-8083-exec-1] Initializing Servlet 'dispatcherServlet'
+2021-12-01 11:13:29,941 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-8083-exec-1] Completed initialization in 1 ms
+2021-12-01 11:13:29,958 INFO com.terrydu.asyncservice.api.mvc.controller.AsyncTenantController [http-nio-8083-exec-1] Handling request for '/api/async/tenant/ ZzssDD
+2021-12-01 11:13:29,978 INFO com.terrydu.asyncservice.api.HttpService [RxCachedThreadScheduler-1] Calling Terry URL, tenant: ZzssDD on thread RxCachedThreadScheduler-1
+2021-12-01 11:13:45,963 INFO com.terrydu.asyncservice.api.jersey.controller.AsyncTenantController [http-nio-8083-exec-3] Calling Terry URL, tenant: ZzssDD on thread http-nio-8083-exec-3
+2021-12-01 11:13:45,963 INFO com.terrydu.asyncservice.api.HttpService [RxCachedThreadScheduler-1] Calling Terry URL, tenant: ZzssDD on thread RxCachedThreadScheduler-1
+2021-12-01 11:14:01,121 INFO com.terrydu.asyncservice.api.HttpService [RxCachedThreadScheduler-1] Calling Terry URL, tenant: ZzssDD on thread RxCachedThreadScheduler-1

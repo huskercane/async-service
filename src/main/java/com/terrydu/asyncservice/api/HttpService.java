@@ -1,39 +1,20 @@
 package com.terrydu.asyncservice.api;
 
+import com.terrydu.asyncservice.api.exception.FetchException;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Single;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class HttpService {
-
-  public Single<HttpResponse> callHttp(String tenantName, String httpsUrl) {
-    return callHttpPrivate(tenantName, httpsUrl);
-  }
-
-  private Single<HttpResponse> callHttpPrivate(String tenantName, String httpsUrl) {
-    return Single.create(singleSubscriber -> {
-      System.out.println("Calling Terry URL, tenant: " + tenantName + "' on thread " + Thread.currentThread().getName());
-      String response = "<ERROR>";
-
-      try {
-        response = responseFromHttpCall(httpsUrl);
-      } catch (IOException e) {
-        e.printStackTrace();
-        singleSubscriber.onError(new RuntimeException("rrrrr", e));
-      }
-      HttpResponse t = new HttpResponse(response, tenantName);
-      singleSubscriber.onSuccess(t);
-
-    });
-  }
-
+  private static final Logger logger = LoggerFactory.getLogger(HttpService.class);
   private String responseFromHttpCall(String httpsUrl) throws IOException {
     URL myUrl = new URL(httpsUrl);
     HttpsURLConnection conn = (HttpsURLConnection) myUrl.openConnection();
@@ -57,18 +38,19 @@ public class HttpService {
   /**
    * Deletes the entity having supplied id.
    *
-   * @param inId Id of entity to delete.
+   * @param tenantName tenant name of entity to delete.
+   * @param httpsUrl url to fetch.
    * @return Observable that will receive completion, or exception if error occurs.
    */
-  public Observable<HttpResponse> callJersey(String tenantName, String httpsUrl) {
+  public Observable<HttpResponse> fetchData(String tenantName, String httpsUrl) {
     return Observable.create(inSource -> {
-      System.out.println("Calling Terry URL, tenant: " + tenantName + "' on thread " + Thread.currentThread().getName());
+      logger.info("Calling Terry URL, tenant: {} on thread {}", tenantName,  Thread.currentThread().getName());
       String response = "<ERROR>";
       try {
         response = responseFromHttpCall(httpsUrl);
       } catch (IOException e) {
-        e.printStackTrace();
-        inSource.onError(new RuntimeException("rrrrr", e));
+        logger.error("Error calling HttpService", e);
+        inSource.onError(new FetchException("Error Fetching Data from the URL", e));
       }
       HttpResponse value = new HttpResponse(response, tenantName);
       inSource.onNext(value);
