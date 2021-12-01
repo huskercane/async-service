@@ -7,7 +7,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import javax.net.ssl.HttpsURLConnection;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.BoundRequestBuilder;
+import org.asynchttpclient.Dsl;
+import org.asynchttpclient.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,8 +41,39 @@ public class HttpService {
     return stringBuilder.toString();
   }
 
+  private String responseFromAsyncHttpCall(String httpsUrl) throws ExecutionException, InterruptedException {
+    AsyncHttpClient client = Dsl.asyncHttpClient();
+    BoundRequestBuilder getRequest = client.prepareGet(httpsUrl);
+
+    Future<Response> response = getRequest.execute();
+    return response.get().getResponseBody();
+  }
+
   /**
-   * Deletes the entity having supplied id.
+   * Fetches data from a API
+   *
+   * @param tenantName tenant name of entity to delete.
+   * @param httpsUrl url to fetch.
+   * @return Observable that will receive completion, or exception if error occurs.
+   */
+  public Observable<HttpResponse> fetchDataSync(String tenantName, String httpsUrl) {
+    return Observable.create(inSource -> {
+      logger.info("Calling Terry URL, tenant: {} on thread {}", tenantName, Thread.currentThread().getName());
+      String response = "<ERROR>";
+      try {
+        response = responseFromHttpCall(httpsUrl);
+      } catch (IOException e) {
+        logger.error("Error calling HttpService", e);
+        inSource.onError(new FetchException("Error Fetching Data from the URL", e));
+      }
+      HttpResponse value = new HttpResponse(response, tenantName);
+      inSource.onNext(value);
+      inSource.onComplete();
+    });
+  }
+
+  /**
+   * Fetches data from a API
    *
    * @param tenantName tenant name of entity to delete.
    * @param httpsUrl url to fetch.
@@ -45,13 +82,7 @@ public class HttpService {
   public Observable<HttpResponse> fetchData(String tenantName, String httpsUrl) {
     return Observable.create(inSource -> {
       logger.info("Calling Terry URL, tenant: {} on thread {}", tenantName,  Thread.currentThread().getName());
-      String response = "<ERROR>";
-      try {
-        response = responseFromHttpCall(httpsUrl);
-      } catch (IOException e) {
-        logger.error("Error calling HttpService", e);
-        inSource.onError(new FetchException("Error Fetching Data from the URL", e));
-      }
+      String response = responseFromAsyncHttpCall(httpsUrl);
       HttpResponse value = new HttpResponse(response, tenantName);
       inSource.onNext(value);
       inSource.onComplete();
