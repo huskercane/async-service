@@ -8,14 +8,14 @@ import org.springframework.context.annotation.ComponentScan;
 @ServletComponentScan
 @SpringBootApplication
 @ComponentScan({
-		"com.terrydu.asyncservice",
-		"com.terrydu.asyncservice.api.servlet.controller",
-		"com.terrydu.asyncservice.api.mvc.controller",
-		"com.terrydu.asyncservice.api.jersey.controller"})
+    "com.terrydu.asyncservice",
+    "com.terrydu.asyncservice.api.servlet.controller",
+    "com.terrydu.asyncservice.api.mvc.controller",
+    "com.terrydu.asyncservice.api.jersey.controller"})
 public class AsyncServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AsyncServiceApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(AsyncServiceApplication.class, args);
+  }
 
 }
