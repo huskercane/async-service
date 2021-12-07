@@ -7,12 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import javax.net.ssl.HttpsURLConnection;
+import org.asynchttpclient.AsyncCompletionHandler;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.Dsl;
-import org.asynchttpclient.ListenableFuture;
 import org.asynchttpclient.Request;
 import org.asynchttpclient.Response;
 import org.slf4j.Logger;
@@ -49,28 +47,18 @@ public class HttpService {
     void run(String x);
   }
 
-  private void responseFromAsyncHttpCall(String httpsUrl, Operation xx) throws ExecutionException, InterruptedException {
+  private void responseFromAsyncHttpCall(String httpsUrl, Operation xx){
     AsyncHttpClient client = Dsl.asyncHttpClient();
     Request getRequest = Dsl.get(httpsUrl).build();
-//    BoundRequestBuilder getRequest = client.prepareGet(httpsUrl);
 
-//    Future<Response> response = getRequest.execute();
-//    return response.get().getResponseBody();
+    client.executeRequest(getRequest, new AsyncCompletionHandler<String>() {
 
-    ListenableFuture<Response> listenableFuture = client.executeRequest(getRequest);
-    listenableFuture.addListener(() -> {
-          Response response = null;
-          try {
-            response = listenableFuture.get();
-            xx.run(response.getResponseBody());
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          } catch (ExecutionException e) {
-            e.printStackTrace();
-          }
-          logger.debug("Response code: " + response.getStatusCode());
-        }
-        , Executors.newCachedThreadPool());
+      @Override
+      public String onCompleted(Response response) throws Exception {
+        xx.run(response.getResponseBody());
+        return response.getResponseBody();
+      }
+    });
   }
 
   /**
@@ -106,7 +94,7 @@ public class HttpService {
   public Observable<HttpResponse> fetchData(String tenantName, String httpsUrl) {
     return Observable.create(inSource -> {
       logger.info("Calling Terry URL, tenant: {} on thread {}", tenantName, Thread.currentThread().getName());
-      responseFromAsyncHttpCall(httpsUrl, (x) -> {
+      responseFromAsyncHttpCall(httpsUrl, x -> {
             HttpResponse value = new HttpResponse(x, tenantName);
             inSource.onNext(value);
             inSource.onComplete();
