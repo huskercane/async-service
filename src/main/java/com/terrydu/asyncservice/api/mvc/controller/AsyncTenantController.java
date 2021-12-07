@@ -5,7 +5,6 @@ import static com.terrydu.asyncservice.api.Constant.SERVICE_URL_15;
 import com.terrydu.asyncservice.api.HttpResponse;
 import com.terrydu.asyncservice.api.HttpService;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
@@ -35,7 +34,6 @@ public class AsyncTenantController {
 
     Observable<HttpResponse> stringSingle = httpService.fetchData(tenantName, SERVICE_URL_15);
     return stringSingle
-        .subscribeOn(Schedulers.io())
         .map(s -> ResponseEntity.ok().body("{\"response\":\"" + s.getResponse() + "\",\"tenant\":\"" + s.getThreadLocalTenantName() + "\"}"));
 
   }

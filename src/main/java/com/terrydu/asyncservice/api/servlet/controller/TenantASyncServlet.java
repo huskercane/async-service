@@ -3,7 +3,6 @@ package com.terrydu.asyncservice.api.servlet.controller;
 import static com.terrydu.asyncservice.api.Constant.SERVICE_URL_15;
 
 import com.terrydu.asyncservice.api.HttpService;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.inject.Inject;
@@ -27,28 +26,22 @@ public class TenantASyncServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws IOException {
-    final AsyncContext asyncContext = servletRequest.startAsync(servletRequest, servletResponse);
     //Set the content type
     servletResponse.setContentType("application/json");
 
     //Get the output stream writer
     PrintWriter out = servletResponse.getWriter();
+    final AsyncContext asyncContext = servletRequest.startAsync(servletRequest, servletResponse);
 
     String tenantName = servletRequest.getParameter("name");
     httpService.fetchData(tenantName, SERVICE_URL_15)
-        .subscribeOn(Schedulers.io())
         .subscribe(
-            s -> {
-              out.write("{\"response\":\"" + s.getResponse() + "\",\"tenant\":\"" + s.getThreadLocalTenantName() + "\"}");
-            },
+            s -> out.write("{\"response\":\"" + s.getResponse() + "\",\"tenant\":\"" + s.getThreadLocalTenantName() + "\"}"),
             t -> {
               logger.error(t.getMessage());
               out.write("{\"response\":\"" + t.getMessage() + "\",\"tenant\":\"ERROR\"}");
             },
-            () -> {
-              logger.debug("Closing the response.");
-              asyncContext.complete();
-            }
+            asyncContext::complete
 
         );
   }

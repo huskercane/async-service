@@ -1,5 +1,7 @@
 package com.terrydu.asyncservice.api;
 
+import static org.asynchttpclient.Dsl.config;
+
 import com.terrydu.asyncservice.api.exception.FetchException;
 import io.reactivex.rxjava3.core.Observable;
 import java.io.BufferedReader;
@@ -48,15 +50,19 @@ public class HttpService {
   }
 
   private void responseFromAsyncHttpCall(String httpsUrl, Operation xx){
-    AsyncHttpClient client = Dsl.asyncHttpClient();
+    AsyncHttpClient client = Dsl.asyncHttpClient(config().setIoThreadsCount(50));
     Request getRequest = Dsl.get(httpsUrl).build();
 
     client.executeRequest(getRequest, new AsyncCompletionHandler<String>() {
 
       @Override
       public String onCompleted(Response response) throws Exception {
-        xx.run(response.getResponseBody());
-        return response.getResponseBody();
+        String responseBody = response.getResponseBody();
+        xx.run(responseBody);
+
+        client.close();
+
+        return responseBody;
       }
     });
   }
@@ -93,7 +99,7 @@ public class HttpService {
    */
   public Observable<HttpResponse> fetchData(String tenantName, String httpsUrl) {
     return Observable.create(inSource -> {
-      logger.info("Calling Terry URL, tenant: {} on thread {}", tenantName, Thread.currentThread().getName());
+      logger.info("Calling Terry URL, tenant: {}", tenantName);
       responseFromAsyncHttpCall(httpsUrl, x -> {
             HttpResponse value = new HttpResponse(x, tenantName);
             inSource.onNext(value);

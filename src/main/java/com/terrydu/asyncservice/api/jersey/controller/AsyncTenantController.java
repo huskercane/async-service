@@ -5,7 +5,6 @@ import static com.terrydu.asyncservice.api.Constant.SERVICE_URL_15;
 import com.terrydu.asyncservice.api.HttpResponse;
 import com.terrydu.asyncservice.api.HttpService;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -35,6 +34,6 @@ public class AsyncTenantController {
     logger.info("Calling Terry URL, tenant: {} on thread {}", tenantName,  Thread.currentThread().getName());
 
     Observable<HttpResponse> observable = httpService.fetchData(tenantName, SERVICE_URL_15);
-    observable.subscribeOn(Schedulers.io()).subscribe(async::resume, async::resume);
+    observable.subscribe(async::resume, async::resume);
   }
 }
