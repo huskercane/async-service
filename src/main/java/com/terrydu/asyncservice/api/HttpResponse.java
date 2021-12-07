@@ -2,8 +2,8 @@ package com.terrydu.asyncservice.api;
 
 public class HttpResponse {
 
-  String threadLocalTenantName;
-  String response;
+  final String threadLocalTenantName;
+  final String response;
 
   public HttpResponse(String response, String t) {
     this.threadLocalTenantName = t;
